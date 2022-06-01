@@ -2,7 +2,6 @@
 #include "motors.h"
 #include "PS2_controller.h"
 
-#define DEBUG
 #define SPEED 3000
 #define TURNING_SPEED 1000
 

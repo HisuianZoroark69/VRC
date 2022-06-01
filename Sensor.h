@@ -20,11 +20,14 @@ void SetupSensor(){
     pinMode(S5_PIN, INPUT);
     pinMode(CLP_PIN, INPUT);
 }
-
-void GetSensorResult(unsigned int &resultBuffer){
-    resultBuffer = 0;
+unsigned int GetSensorResult(){
+    unsigned int resultBuffer = 0;
     for(int i = 0; i < 6; i++){
         resultBuffer = (resultBuffer << 1) + (digitalRead(pins[i]) == LOW ? 0b0 : 0b1);
-        
     } 
+    return resultBuffer;
 } 
+void GetSensorResult(unsigned int &resultBuffer){
+    resultBuffer = GetSensorResult();
+} 
+

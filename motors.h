@@ -37,7 +37,11 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 int currentFreq;
-
+/**
+ * @brief Check whether the PWM frequency is changed and change it.
+ * 
+ * @param freq The frequency of PWM.
+ */
 void setPWMFreq(int freq){
   if(freq != currentFreq)
   {

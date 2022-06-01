@@ -11,13 +11,13 @@
  * @param pressed The pointer to check whether
  *                a button is pressed in the loop
  */
-void MovementControl(bool *pressed) {
+void MovementControl(bool &pressed) {
   if (ps2x.Button(PSB_PAD_UP)) // tương tự như trên kiểm tra nút Lên (PAD UP)
   { 
     #ifdef DEBUG
     Serial.println("Up Pressed");
     #endif
-    *pressed = true;
+    pressed = true;
     setMotor(0, SPEED);
     setMotor(1, SPEED);
   }
@@ -26,7 +26,7 @@ void MovementControl(bool *pressed) {
     #ifdef DEBUG
     Serial.println("Right Pressed");
     #endif
-    *pressed = true;
+    pressed = true;
     setMotor(0, TURNING_SPEED);
     setMotor(1, -TURNING_SPEED);
   }
@@ -35,7 +35,7 @@ void MovementControl(bool *pressed) {
     #ifdef DEBUG
     Serial.println("Left Pressed");
     #endif
-    *pressed = true;
+    pressed = true;
     setMotor(0, -TURNING_SPEED);
     setMotor(1, TURNING_SPEED);
   }
@@ -44,7 +44,7 @@ void MovementControl(bool *pressed) {
     #ifdef DEBUG
     Serial.println("Down Pressed");
     #endif
-    *pressed = true;
+    pressed = true;
     setMotor(0, -SPEED);
     setMotor(1, -SPEED);
     //setPWMMotors(SPEED, 0, SPEED, 0);
@@ -57,12 +57,12 @@ void MovementControl(bool *pressed) {
  * @param pressed The pointer to check whether
  *                a button is pressed in the loop
  */
-void ServoControl(bool *pressed){
+void ServoControl(bool &pressed){
   if (ps2x.Button(PSB_L1)){
     #ifdef DEBUG
     Serial.println("L1 pressed");
     #endif
-    *pressed = true;
+    pressed = true;
     setMotor(2, SPEED);
     setMotor(3, -SPEED);
   }
@@ -71,6 +71,6 @@ void ServoControl(bool *pressed){
     Serial.println("Circle pressed");
     #endif
     setServo(7, 20);
-    *pressed = true; 
+    pressed = true; 
   }
 }

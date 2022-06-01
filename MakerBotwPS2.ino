@@ -3,6 +3,10 @@
 #include "motors.h"
 #include "PS2_controller.h"
 #include "Controls.h"
+#include "Sensor.h"
+
+bool pressed;
+unsigned int sensorResult;
 
 void setup()
 {
@@ -11,17 +15,19 @@ void setup()
   #endif
   initMotors();
   setupPS2controller();
+  SetupSensor();
   //Serial.println("Done setup!");
 }
+
 void loop()
 {
   ps2x.read_gamepad();
-  bool pressed = false;
-  //PS2control();
-  
-  MovementControl(&pressed);
-  ServoControl(&pressed);
-  
+  pressed = false;
+
+  MovementControl(pressed);
+  ServoControl(pressed);
+  GetSensorResult(sensorResult);
+
   if(!pressed) resetMotors();
 
   //Bắt buộc phải delay, k thì lủng LMAO

@@ -29,7 +29,7 @@ void SetupSensor(){
 unsigned int GetSensorResult(){
     unsigned int resultBuffer = 0;
     for(int i = 0; i < 6; i++){
-        resultBuffer = (resultBuffer << 1) + (digitalRead(pins[i]) == LOW ? 0b0 : 0b1);
+        resultBuffer = (resultBuffer << 1) + digitalRead(pins[i]);
     } 
     return resultBuffer;
 }

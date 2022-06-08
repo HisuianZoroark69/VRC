@@ -70,7 +70,7 @@ void ServoControl(bool &pressed){
     #ifdef DEBUG
     Serial.println("Circle pressed");
     #endif
-    setServo(7, 20);
+    setServo(PWM_CHANNELJ3, 20);
     pressed = true; 
   }
 }

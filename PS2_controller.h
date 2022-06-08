@@ -10,7 +10,7 @@ PS2X ps2x; // create PS2 Controller Class
 #define PS2_CLK 14 //SLK   18
 
 #define pressures false
-#define rumble false
+#define rumble true
 
 //#define MIN_PWM 0
 //#define MAX_PWM 4095

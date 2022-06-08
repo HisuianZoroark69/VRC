@@ -16,14 +16,15 @@ void setup()
   initMotors();
   setupPS2controller();
   SetupSensor();
-  //Serial.println("Done setup!");
-}
 
+  initServo(PWM_CHANNELJ3, Normal);
+  Serial.println("Done setup!");
+}
+int i = 0;
 void loop()
 {
-  ps2x.read_gamepad();
+  ps2x.read_gamepad(pressed, 0);
   pressed = false;
-
   MovementControl(pressed);
   ServoControl(pressed);
   GetSensorResult(sensorResult);

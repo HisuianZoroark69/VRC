@@ -20,12 +20,12 @@
 //#define SDA 3
 //#define SCL 0
 // PWM channels of pca9685 0-16
-#define PWM_CHANNELJ2 7
-#define PWM_CHANNELJ1 6
-#define PWM_CHANNELJ6 5
-#define PWM_CHANNELJ5 4
-#define PWM_CHANNELJ4 3
-#define PWM_CHANNELJ3 2
+#define PWM_CHANNELJ3 7
+#define PWM_CHANNELJ4 6
+#define PWM_CHANNELJ5 5
+#define PWM_CHANNELJ6 4
+#define PWM_CHANNELJ1 3
+#define PWM_CHANNELJ2 2
 #define PWM_CHANNEL11 8 
 #define PWM_CHANNEL12 9
 #define PWM_CHANNEL21 10
@@ -36,6 +36,11 @@
 #define PWM_CHANNEL42 15
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+enum ServoType {Normal = 1, Continuous};
+
+ServoType ServoTypes[8] = {Continuous,Continuous,Continuous,Continuous,Continuous,Continuous,Continuous,Continuous};
+
 int currentFreq;
 /**
  * @brief Check whether the PWM frequency is changed and change it.
@@ -54,14 +59,23 @@ void setPWMFreq(int freq){
  * @brief Set the servo speed.
  * 
  * @param servoId The pwm channel of the servo.
- * @param c The speed of the servo, ranging from -100 to 100 (percent).
+ * @param c If the servo is continuous, this set speed of the servo, ranging from -100 to 100 (percent).
  *          Positive value will turn the servo clockwise and vice versa.
+ * @param c If the servo is a normal servo, this will set the angle of the servo
+ *          Unit: Degree
  */
 void setServo(int servoId, int c){
   setPWMFreq(SERVO_FREQ);
-  c = -c;
-  int pulse = (c < 0 ? SERVOSTOPMIN : SERVOSTOPMAX) + 0.76 * c;
-  pwm.setPWM(servoId, 0, pulse);
+  if(ServoTypes[servoId] == Continuous){
+    c = -c;
+    int pulse = (c < 0 ? SERVOSTOPMIN : SERVOSTOPMAX) + 0.76 * c;
+    pwm.setPWM(servoId, 0, pulse);
+  }
+  if(ServoTypes[servoId] == Normal){
+    if(c == 0) return;
+    int pulse = map(c, 0, 180, 205, 409);
+    pwm.setPWM(servoId, 0, pulse);
+  }
 }
 /**
  * @brief Set the DC motor speed
@@ -77,12 +91,12 @@ void setMotor(int motorId, int c){
     return;
   }
   else if(c > 0){
-    pwm.setPWM(8 + motorId * 2, 0, MAX_PWM - c);
+    pwm.setPWM(8 + motorId * 2, 0, c);
     pwm.setPWM(9 + motorId * 2, 4096, 0);
   }
   else {
     pwm.setPWM(8 + motorId * 2, 4096, 0);
-    pwm.setPWM(9 + motorId * 2, 0, MAX_PWM + c);
+    pwm.setPWM(9 + motorId * 2, 0, - c);
   }
   
 }
@@ -127,8 +141,11 @@ void initMotors()
   pwm.setOscillatorFrequency(27000000);
   pwm.setPWMFreq(FREQUENCY);
   Wire.setClock(400000);
-
   //setPWMMotors(0, 0, 0, 0);
+}
+
+void initServo(int servoId, ServoType type){
+  ServoTypes[servoId] = type;
 }
 
 // /**
